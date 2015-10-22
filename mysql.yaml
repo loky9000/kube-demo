@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  labels:
+    name: mysql
+  name: mysql
+spec:
+  replicas: 1
+  selector:
+    name: mysql
+  template:
+    metadata:
+      labels:
+        name: mysql
+    spec:
+      containers:
+        - command:
+                - /bin/sh
+                - -xc
+                - |
+                   sudo apt-get update && sudo  apt-get install -y wget &&
+                   wget -O /tmp/db.sql https://dl.dropboxusercontent.com/u/133677/db.sql &&
+                   wget -O /tmp/schema.sql https://raw.githubusercontent.com/qubell-bazaar/component-petclinic/master/sql/petclinic-mysql-schema.sql &&
+                   wget -O /tmp/data.sql https://raw.githubusercontent.com/qubell-bazaar/component-petclinic/master/sql/petclinic-mysql-dataload.sql &&
+                   /run.sh
+          resources:
+            limits:
+              cpu: 0.6
+              memory: "512Mi"
+          env:
+            - name: MYSQL_PASS
+              value: 1qaz2wsx
+            - name: STARTUP_SQL
+              value: /tmp/db.sql /tmp/schema.sql /tmp/data.sql
+          image: tutum/mysql
+          name: mysql
+          ports:
+            - containerPort: 3306
+              name: mysql
