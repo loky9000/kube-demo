@@ -65,3 +65,9 @@ spec:
         volumeMounts:
         - name: builder-storage
           mountPath: /source
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
