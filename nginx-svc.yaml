@@ -9,7 +9,9 @@ spec:
   clusterIP: 10.10.127.127
   ports:
     # the port that this service should serve on
-    - targetPort: 80
+    - port: 80
+      targetPort: 80
       nodePort: 30752
+  # label keys and values that must match in order to receive traffic for this service
   selector:
     name: nginx
