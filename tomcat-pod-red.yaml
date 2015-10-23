@@ -1,0 +1,64 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: tomcat-builder-xxg
+  labels:
+    name: tomcat
+spec:
+  containers:
+    - name: builder
+      image: qubell/artifact-builder:latest
+      ports:
+        - containerPort: 80
+          name: builder
+      command:
+            - /run.sh
+      resources:
+        limits:
+          cpu: 0.1
+          memory: "100Mi"
+      env:
+        - name: GIT_URL
+          value: "https://github.com/qubell/starter-java-web.git"
+        - name: GIT_BRANCH
+          value: "red"
+        - name: PUBLISH_PATH
+          value: "petclinic.war"
+        - name: ARTIFACT_PATTERN
+          value: "*.war"
+      volumeMounts:
+          # name must match the volume name below
+        - name: builder-storage
+          # mount path within the container
+          mountPath: /source
+    - image: loky9000/tomcat:latest
+      name: tomcat
+      ports:
+        - containerPort: 8080
+          name: tomcat
+      command:
+            #- sleep 500
+            - /configure_and_run.sh
+      resources:
+        limits:
+          cpu: 0.3
+          memory: "200Mi"
+      env:
+        - name: WAR_URL
+          value: http://localhost/petclinic.war?red
+        - name: MYSQL_HOST
+          value: $(MYSQL_SERVICE_HOST)
+        - name: MYSQL_PORT
+          value: $(MYSQL_SERVICE_PORT)
+        - name: MYSQL_USERNAME
+          value: petclinic
+        - name: MYSQL_PASSWORD
+          value: petclinic
+      volumeMounts:
+          # name must match the volume name below
+        - name: builder-storage
+          # mount path within the container
+          mountPath: /source
+  volumes:
+    - name: builder-storage
+      emptyDir: {}
