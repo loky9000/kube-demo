@@ -27,7 +27,7 @@ spec:
         resources:
           limits:
             cpu: 0.1
-            memory: "100Mi"
+            memory: "300Mi"
         env:
         - name: GIT_URL
           value: "https://github.com/qubell/starter-java-web.git"
