@@ -15,7 +15,9 @@ spec:
     spec:
       volumes:
       - name: builder-storage
-        emptyDir: {}
+        awsElasticBlockStore:
+          volumeID: vol-5ed10ab1
+          fsType: ext4
       containers:
       - name: builder
         image: qubell/artifact-builder:latest
