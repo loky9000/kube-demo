@@ -16,7 +16,7 @@ spec:
       volumes:
       - name: builder-storage
         awsElasticBlockStore:
-          volumeID: vol-64e86682
+          volumeID: vol-193615d8
           fsType: ext4
       containers:
       - name: builder
