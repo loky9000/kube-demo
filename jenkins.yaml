@@ -24,7 +24,7 @@ spec:
           limits:
             cpu: 1
             memory: "512Mi"
-        image: jenkins
+        image: loky9000/jenkins
         ports:
           - containerPort: 8080
             name: jenkins
